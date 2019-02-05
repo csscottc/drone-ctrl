@@ -7,12 +7,12 @@ const TELLO_CMD_PORT = 8889;
 const TELLO_HOST = "192.168.10.1";
 
 
-async function handleInput(line, server) {
+async function handleInput(line, socket) {
     switch (line) {
         case "takeoff":
             console.log("Detected takeoff command.");
             try { 
-                await sendTakeOff(server);
+                await sendTakeOff(socket);
             } catch (err) {
                 console.log(err);
             }
@@ -20,7 +20,7 @@ async function handleInput(line, server) {
         case "land":
             console.log("Detected land command.");
             try {
-                await sendLand(server);
+                await sendLand(socket);
             } catch (err) {
                 console.log(err);
             }
@@ -28,14 +28,22 @@ async function handleInput(line, server) {
         case "battery":
             console.log("Detected battery command.");
             try {
-                await getBattery(server);
+                await getBattery(socket);
+            } catch (err) {
+                console.log(err);
+            }
+            break;
+        case "flip":
+            console.log("Detected flip command.");
+            try {
+                await sendFlip(socket);
             } catch (err) {
                 console.log(err);
             }
             break;
         case "exit":
             console.log("Detected exit command.");
-            server.close(() => {
+            socket.close(() => {
                 console.log("Socket was closed");
                 process.exit(0);
             });
@@ -45,9 +53,9 @@ async function handleInput(line, server) {
     }
 }
 
-function sendTakeOff(server) {
+function sendTakeOff(socket) {
     return new Promise((resolve) => {
-        server.send("takeoff",0,"takeoff".length,TELLO_CMD_PORT, TELLO_HOST, err => {
+        socket.send("takeoff",0,"takeoff".length,TELLO_CMD_PORT, TELLO_HOST, err => {
             if(err) {
                 throw err;
             } else {
@@ -57,9 +65,9 @@ function sendTakeOff(server) {
     });
 }
 
-function sendLand(server) {
+function sendLand(socket) {
     return new Promise((resolve) => {
-        server.send("land",0,"land".length,TELLO_CMD_PORT, TELLO_HOST, err => {
+        socket.send("land",0,"land".length,TELLO_CMD_PORT, TELLO_HOST, err => {
             if(err) {
                 throw err;
             } else {
@@ -69,9 +77,9 @@ function sendLand(server) {
     });
 }
 
-function getBattery(server) {
+function getBattery(socket) {
     return new Promise((resolve) => {
-        server.send("battery?",0,"battery?".length,TELLO_CMD_PORT, TELLO_HOST, err => {
+        socket.send("battery?",0,"battery?".length,TELLO_CMD_PORT, TELLO_HOST, err => {
             if(err) {
                 throw err;
             } else {
@@ -81,9 +89,21 @@ function getBattery(server) {
     });
 }
 
-function sendInitCommand(server) {
+function sendInitCommand(socket) {
     return new Promise((resolve) => {
-        server.send("command",0,"command".length,TELLO_CMD_PORT, TELLO_HOST, err => {
+        socket.send("command",0,"command".length,TELLO_CMD_PORT, TELLO_HOST, err => {
+            if(err) {
+                throw err;
+            } else {
+                return resolve();
+            }
+        });
+    });
+}
+
+function sendFlip(socket) {
+    return new Promise((resolve) => {
+        socket.send("flip b",0,"flip b".length,TELLO_CMD_PORT, TELLO_HOST, err => {
             if(err) {
                 throw err;
             } else {
@@ -95,25 +115,25 @@ function sendInitCommand(server) {
 
 function getSocket() {
     const socket = createSocket("udp4");
-    socket.bind(this.TELLO_CMD_PORT);
+    socket.bind(TELLO_CMD_PORT);
     return socket;
 }
 
 (async function(){
     console.log(`Lets get started!`);
-    const server = getSocket();
-    server.on("message", (msg) => {
+    const socket = getSocket();
+    socket.on("message", (msg) => {
         console.log(`Message from drone: ${msg.toString()}`);
     });
-    server.on("error", (err) => {
+    socket.on("error", (err) => {
         console.log(`There was an error: ${err}`);
     });
-    server.on("listening", () => {
-        console.log("Server is listening");
+    socket.on("listening", () => {
+        console.log("Socket is listening");
     });
-    await sendInitCommand(server);
+    await sendInitCommand(socket);
     console.log(`Please enter a command:`);
-    rl.on("line", line => handleInput(line, server));
+    rl.on("line", line => handleInput(line, socket));
 })();
 
 
