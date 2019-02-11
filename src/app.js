@@ -2,8 +2,10 @@ const readline = require("readline");
 const rl = readline.createInterface({ "input": process.stdin, "output": process.stdout});
 const Socket = require("dgram").Socket;
 const createSocket = require("dgram").createSocket;
+const throttle = require("lodash").throttle;
 
 const TELLO_CMD_PORT = 8889;
+const TELLO_DATA_PORT = 8890;
 const TELLO_HOST = "192.168.10.1";
 
 
@@ -113,15 +115,26 @@ function sendFlip(socket) {
     });
 }
 
-function getSocket() {
+function getSocket(PORT) {
     const socket = createSocket("udp4");
-    socket.bind(TELLO_CMD_PORT);
+    socket.bind(PORT);
     return socket;
 }
-
+function parseDataMessage(message) {
+    // Take off the /r/n and space from the end of the string.
+    message = message.slice(0,message.length-6);
+    // Each item in the array is one field of the message.
+    const msgArray = message.split(";");
+    const msg = {};
+    msgArray.forEach(field => {
+        const f = field.split(":");
+        msg[f[0]] = f[1];
+    });
+console.log(msg);
+}
 (async function(){
     console.log(`Lets get started!`);
-    const socket = getSocket();
+    const socket = getSocket(TELLO_CMD_PORT);
     socket.on("message", (msg) => {
         console.log(`Message from drone: ${msg.toString()}`);
     });
@@ -132,6 +145,8 @@ function getSocket() {
         console.log("Socket is listening");
     });
     await sendInitCommand(socket);
+    const dataSocket = getSocket(TELLO_DATA_PORT);
+    dataSocket.on("message",throttle(msg => parseDataMessage(msg.toString()),5000));
     console.log(`Please enter a command:`);
     rl.on("line", line => handleInput(line, socket));
 })();

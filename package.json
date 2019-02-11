@@ -16,5 +16,8 @@
     "url": "https://github.com/csscottc/drone-ctrl/issues"
   },
   "homepage": "https://github.com/csscottc/drone-ctrl#readme",
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
 }
