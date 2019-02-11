@@ -8,48 +8,76 @@ const TELLO_HOST = "192.168.10.1";
 
 
 async function handleInput(line, socket) {
-    switch (line) {
-        case "takeoff":
-            console.log("Detected takeoff command.");
-            try { 
-                await sendTakeOff(socket);
-            } catch (err) {
-                console.log(err);
-            }
-            break;
-        case "land":
-            console.log("Detected land command.");
-            try {
-                await sendLand(socket);
-            } catch (err) {
-                console.log(err);
-            }
-            break;
-        case "battery":
-            console.log("Detected battery command.");
-            try {
-                await getBattery(socket);
-            } catch (err) {
-                console.log(err);
-            }
-            break;
-        case "flip":
-            console.log("Detected flip command.");
-            try {
-                await sendFlip(socket);
-            } catch (err) {
-                console.log(err);
-            }
-            break;
-        case "exit":
+    function isTakeoff(line) {
+        return line === "takeoff";
+    }
+    function isLand(line) {
+        return line === "land";
+    }
+    function isForward(line) {
+        return line.startsWith("forward");
+    }
+    function isBattery(line) {
+        return line === "battery";
+    }
+    function isFlip(line) {
+        return line === "flip";
+    }
+    function isExit(line) {
+        return line === "exit";
+    }
+
+    if(isTakeoff(line)) {
+        try{
+            await sendTakeOff(socket);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    if(isLand(line)) {
+        try {
+            await sendLand(socket);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    if(isForward(line)) {
+        const [name, dist] = line.split(" ");
+        try {
+            await sendForward(socket, dist);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    if(isBattery(line)) {
+        try {
+            await getBattery(socket);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    if(isFlip(line)) {
+        try {
+            await sendFlip(socket);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    if(isExit(line)) {
+        try {
             console.log("Detected exit command.");
             socket.close(() => {
                 console.log("Socket was closed");
                 process.exit(0);
             });
-            break;
-        default:
-            break;
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 
@@ -68,6 +96,18 @@ function sendTakeOff(socket) {
 function sendLand(socket) {
     return new Promise((resolve) => {
         socket.send("land",0,"land".length,TELLO_CMD_PORT, TELLO_HOST, err => {
+            if(err) {
+                throw err;
+            } else {
+                return resolve();
+            }
+        });
+    });
+}
+
+function sendForward(socket, distance = 20) {
+    return new Promise((resolve) => {
+        socket.send(`forward ${distance}`,0,`forward ${distance}`.length,TELLO_CMD_PORT, TELLO_HOST, err => {
             if(err) {
                 throw err;
             } else {
