@@ -1,0 +1,20 @@
+{
+  "name": "drone-ctrl",
+  "version": "1.0.0",
+  "description": "Simple app to control a DJI Tello Drone",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csscottc/drone-ctrl.git"
+  },
+  "author": "Scott Carpenter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csscottc/drone-ctrl/issues"
+  },
+  "homepage": "https://github.com/csscottc/drone-ctrl#readme",
+  "keywords": []
+}
