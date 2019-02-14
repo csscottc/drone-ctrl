@@ -17,6 +17,15 @@ async function handleInput(line, socket) {
     function isForward(line) {
         return line.startsWith("forward");
     }
+    function isBack(line) {
+        return line.startsWith("back");
+    }
+    function isLeft(line) {
+        return line.startsWith("left");
+    }
+    function isRight(line) {
+        return line.startsWith("right");
+    }
     function isBattery(line) {
         return line === "battery";
     }
@@ -47,6 +56,33 @@ async function handleInput(line, socket) {
         const [name, dist] = line.split(" ");
         try {
             await sendForward(socket, dist);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    
+    if(isBack(line)) {
+        const [name, dist] = line.split(" ");
+        try {
+            await sendBack(socket, dist);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    if(isLeft(line)) {
+        const [name, dist] = line.split(" ");
+        try {
+            await sendLeft(socket, dist);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    if(isRight(line)) {
+        const [name, dist] = line.split(" ");
+        try {
+            await sendRight(socket, dist);
         } catch (err) {
             console.log(err);
         }
@@ -117,6 +153,41 @@ function sendForward(socket, distance = 20) {
     });
 }
 
+function sendBack(socket, distance = 20) {
+    return new Promise((resolve) => {
+        socket.send(`back ${distance}`,0,`back ${distance}`.length,TELLO_CMD_PORT, TELLO_HOST, err => {
+            if(err) {
+                throw err;
+            } else {
+                return resolve();
+            }
+        });
+    });
+}
+
+function sendRight(socket, distance = 20) {
+    return new Promise((resolve) => {
+        socket.send(`right ${distance}`,0,`right ${distance}`.length,TELLO_CMD_PORT, TELLO_HOST, err => {
+            if(err) {
+                throw err;
+            } else {
+                return resolve();
+            }
+        });
+    });
+}
+
+function sendLeft(socket, distance = 20) {
+    return new Promise((resolve) => {
+        socket.send(`left ${distance}`,0,`left ${distance}`.length,TELLO_CMD_PORT, TELLO_HOST, err => {
+            if(err) {
+                throw err;
+            } else {
+                return resolve();
+            }
+        });
+    });
+}
 function getBattery(socket) {
     return new Promise((resolve) => {
         socket.send("battery?",0,"battery?".length,TELLO_CMD_PORT, TELLO_HOST, err => {
