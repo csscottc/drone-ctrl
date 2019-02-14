@@ -60,7 +60,7 @@ async function handleInput(line, socket) {
             console.log(err);
         }
     }
-    
+
     if(isBack(line)) {
         const [name, dist] = line.split(" ");
         try {
@@ -246,7 +246,3 @@ function getSocket() {
     console.log(`Please enter a command:`);
     rl.on("line", line => handleInput(line, socket));
 })();
-
-
-
-
