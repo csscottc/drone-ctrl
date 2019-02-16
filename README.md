@@ -1,5 +1,8 @@
 # drone-ctrl
 
+## Versions
+Node v8.10.0+
+
 ## Getting Started
 First, connect to your Tello drones WiFi network, once the connection is up and running you can start the application.
 To start the application use either `npm start` or `node ./src/app.js`.
