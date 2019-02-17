@@ -43,6 +43,10 @@ function getSocket() {
     console.log(`Please enter a command:`);
     rl.on("line", (line) => {
         if (!cmdp.parseCommand(line)) {
+            if(line === "exit") {
+                console.log("Goodbye.");
+                process.exit(0);
+            }
             console.log("Not a valid command");
         }
     });
