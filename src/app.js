@@ -1,5 +1,6 @@
 const readline = require("readline");
 const { createSocket } = require("dgram");
+const io = require("socket.io")();
 const CommandParser = require("./command-parser");
 const Commander = require("./commander");
 
@@ -50,4 +51,21 @@ function getSocket() {
             console.log("Not a valid command");
         }
     });
+
+    io.on("connection", (conn) => {
+        console.log("Connection established.");
+        conn.on("message", msg => {
+            console.log(`Received message from web socket: ${msg}`);
+            if (!cmdp.parseCommand(msg)) {
+                conn.send("Not a valid command.");
+            }
+        });
+        conn.send("Connected to the server !");
+    });
+
+    io.on("disconnect",() => {
+        console.log("Client has disconnected.");
+    })
+
+    io.listen(3000);
 })();
