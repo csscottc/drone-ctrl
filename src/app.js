@@ -19,7 +19,7 @@ function getSocket() {
 (async function start() {
     const socket = getSocket();
     const cmder = new Commander(socket, TELLO_HOST, TELLO_CMD_PORT);
-    await cmder.sendCommand();
+    await cmder.sendInitCommand();
     const cmdp = new CommandParser(cmder);
     console.log(`Lets get started!`);
     socket.on('message', (msg) => {
@@ -38,7 +38,7 @@ function getSocket() {
                 console.log('Goodbye.');
                 process.exit(0);
             }
-            console.log('Not a valid command');
+            console.log('Opps! Not a valid command!\nPlease enter a command:');
         }
     });
 })();
