@@ -1,11 +1,11 @@
 {
   "name": "drone-ctrl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple app to control a DJI Tello Drone",
   "main": "app.js",
   "scripts": {
     "start": "node ./src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -17,13 +17,20 @@
     "url": "https://github.com/csscottc/drone-ctrl/issues"
   },
   "homepage": "https://github.com/csscottc/drone-ctrl#readme",
-  "keywords": [],
+  "keywords": [
+    "udp protocol",
+    "drone controller"
+  ],
+  "dependencies": {
+    "dgram": "^1.0.1"
+  },
   "devDependencies": {
-    "eslint": "^5.13.0",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "mocha": "^7.2.0",
     "prettier": "^1.16.4"
   }
 }

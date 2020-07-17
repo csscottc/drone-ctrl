@@ -1,0 +1,17 @@
+language: node
+node_js:
+   - "13"
+
+cache:
+  npm: false
+
+# before_script:
+#    - npm install
+
+# script:
+#    - npm run test
+#    - npm run start
+
+# i will delete next it
+script:
+   - npm install

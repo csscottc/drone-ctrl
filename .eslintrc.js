@@ -1,7 +1,11 @@
 module.exports = {
-    "extends": ["airbnb-base","prettier"],
+    "env": {
+        "jest": true,
+        "es6": true
+    },
+    "extends": ["airbnb-base", "prettier"],
     "rules": {
-        "quotes": ["error","double",{"allowTemplateLiterals": true}],
+        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
         "indent": ["error", 4]
     }
 };
