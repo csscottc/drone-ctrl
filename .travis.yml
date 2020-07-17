@@ -9,4 +9,4 @@ before_script:
    - npm install
 
 script:
-   - npm run start
+   - npm run test
