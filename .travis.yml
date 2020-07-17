@@ -1,10 +1,11 @@
 language: node_js
+os: linux
 
 services:
    - docker
 
 before_script:
-   - docker ps -a
+   - npm install
 
 script:
    - npm start
