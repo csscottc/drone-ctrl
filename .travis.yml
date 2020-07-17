@@ -1,11 +1,10 @@
-language: node_js
-os: linux
+language: node
 
-services:
-   - docker
+cache:
+  npm: false
 
 before_script:
    - npm install
 
 script:
-   - npm start
+   - npm run start
