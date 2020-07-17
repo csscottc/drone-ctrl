@@ -1,7 +1,7 @@
 module.exports = {
-    "extends": ["airbnb-base","prettier"],
+    "extends": ["airbnb-base", "prettier"],
     "rules": {
-        "quotes": ["error","double",{"allowTemplateLiterals": true}],
-        "indent": ["error", 4]
+        "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+        "indent": ["error", 4],
     }
 };
