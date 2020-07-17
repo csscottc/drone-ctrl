@@ -1,5 +1,5 @@
 const readline = require('readline');
-const { createSocket } = require('dgram');
+const dgram = require('dgram');
 const CommandParser = require('./command-parser');
 const Commander = require('./commander');
 
@@ -11,7 +11,7 @@ const TELLO_CMD_PORT = 8889;
 const TELLO_HOST = '192.168.10.1';
 
 function getSocket() {
-    const socket = createSocket('udp4');
+    const socket = dgram.createSocket('udp4');
     socket.bind(TELLO_CMD_PORT);
     return socket;
 }
