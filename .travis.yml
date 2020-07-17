@@ -5,9 +5,13 @@ node_js:
 cache:
   npm: false
 
-before_script:
-   - npm install
+# before_script:
+#    - npm install
 
 # script:
 #    - npm run test
 #    - npm run start
+
+# i will delete next it
+script:
+   - npm install
