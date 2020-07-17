@@ -17,7 +17,10 @@
     "url": "https://github.com/csscottc/drone-ctrl/issues"
   },
   "homepage": "https://github.com/csscottc/drone-ctrl#readme",
-  "keywords": [],
+  "keywords": [
+    "udp protocol",
+    "drone controller"
+  ],
   "dependencies": {
     "dgram": "^1.0.1"
   },
